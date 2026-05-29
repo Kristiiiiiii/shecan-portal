@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | She Can Foundation</title>
+    <meta name="description" content="Admin dashboard for She Can Foundation submissions." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a class="brand" href="./index.html" aria-label="Back to main site">
+          <span class="brand-mark" aria-hidden="true">SC</span>
+          <span class="brand-text">
+            <span class="brand-name">She Can Foundation</span>
+            <span class="brand-tag">Admin Dashboard</span>
+          </span>
+        </a>
+
+        <div class="nav-links" style="position: static; display: flex">
+          <a href="./index.html">Home</a>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Admin Login</h2>
+            <p>Login to view volunteer/contact form submissions.</p>
+          </div>
+
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr; margin-top: 18px">
+            <div class="form-card">
+              <form id="loginForm" novalidate>
+                <div class="field">
+                  <label for="adminEmail">Email</label>
+                  <input id="adminEmail" type="email" placeholder="admin@shecan.org" required />
+                  <small class="error" data-error-for="adminEmail"></small>
+                </div>
+                <div class="field">
+                  <label for="adminPassword">Password</label>
+                  <input id="adminPassword" type="password" placeholder="••••••••" required />
+                  <small class="error" data-error-for="adminPassword"></small>
+                </div>
+
+                <button class="btn primary full" id="loginBtn" type="submit">
+                  <span class="btn-text">Login</span>
+                  <span class="spinner" aria-hidden="true"></span>
+                </button>
+                <p class="fineprint">
+                  Tip: set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `backend/.env` for first-run seeding.
+                </p>
+              </form>
+            </div>
+
+            <div class="form-card" id="dashboard" style="display: none">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+                <div>
+                  <p style="margin: 0; font-weight: 900">Submissions</p>
+                  <p class="fineprint" style="margin: 6px 0 0">
+                    Latest entries are shown first (max 200).
+                  </p>
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <button class="icon-btn" id="refreshBtn" type="button" aria-label="Refresh">
+                    <i class="fa-solid fa-rotate"></i>
+                  </button>
+                  <button class="icon-btn" id="logoutBtn" type="button" aria-label="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                id="dashLoading"
+                style="display: none; margin-top: 12px; color: var(--muted); font-weight: 700"
+              >
+                Loading...
+              </div>
+
+              <div id="submissions" style="margin-top: 12px; display: grid; gap: 10px"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast-card">
+        <div class="toast-icon" id="toastIcon" aria-hidden="true">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="toast-body">
+          <p class="toast-title" id="toastTitle">Success</p>
+          <p class="toast-msg" id="toastMsg">Done</p>
+        </div>
+        <button class="toast-close" id="toastClose" aria-label="Close message">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <script src="./admin.js"></script>
+  </body>
+</html>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | She Can Foundation</title>
+    <meta name="description" content="Admin dashboard for She Can Foundation submissions." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a class="brand" href="./index.html" aria-label="Back to main site">
+          <span class="brand-mark" aria-hidden="true">SC</span>
+          <span class="brand-text">
+            <span class="brand-name">She Can Foundation</span>
+            <span class="brand-tag">Admin Dashboard</span>
+          </span>
+        </a>
+
+        <div class="nav-links" style="position: static; display: flex">
+          <a href="./index.html">Home</a>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Admin Login</h2>
+            <p>Login to view volunteer/contact form submissions.</p>
+          </div>
+
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr; margin-top: 18px">
+            <div class="form-card">
+              <form id="loginForm" novalidate>
+                <div class="field">
+                  <label for="adminEmail">Email</label>
+                  <input id="adminEmail" type="email" placeholder="admin@shecan.org" required />
+                  <small class="error" data-error-for="adminEmail"></small>
+                </div>
+                <div class="field">
+                  <label for="adminPassword">Password</label>
+                  <input id="adminPassword" type="password" placeholder="••••••••" required />
+                  <small class="error" data-error-for="adminPassword"></small>
+                </div>
+
+                <button class="btn primary full" id="loginBtn" type="submit">
+                  <span class="btn-text">Login</span>
+                  <span class="spinner" aria-hidden="true"></span>
+                </button>
+                <p class="fineprint">
+                  Tip: set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `backend/.env` for first-run seeding.
+                </p>
+              </form>
+            </div>
+
+            <div class="form-card" id="dashboard" style="display: none">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+                <div>
+                  <p style="margin: 0; font-weight: 900">Submissions</p>
+                  <p class="fineprint" style="margin: 6px 0 0">
+                    Latest entries are shown first (max 200).
+                  </p>
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <button class="icon-btn" id="refreshBtn" type="button" aria-label="Refresh">
+                    <i class="fa-solid fa-rotate"></i>
+                  </button>
+                  <button class="icon-btn" id="logoutBtn" type="button" aria-label="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div id="dashLoading" style="display: none; margin-top: 12px; color: var(--muted); font-weight: 700">
+                Loading...
+              </div>
+
+              <div id="submissions" style="margin-top: 12px; display: grid; gap: 10px"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast-card">
+        <div class="toast-icon" id="toastIcon" aria-hidden="true">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="toast-body">
+          <p class="toast-title" id="toastTitle">Success</p>
+          <p class="toast-msg" id="toastMsg">Done</p>
+        </div>
+        <button class="toast-close" id="toastClose" aria-label="Close message">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <script src="./admin.js"></script>
+  </body>
+</html>
+
