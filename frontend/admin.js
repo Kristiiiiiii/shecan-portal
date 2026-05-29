@@ -157,26 +157,28 @@
     }
   }
 
+  function updateThemeButton(theme) {
+    const isLight = theme === "light";
+    themeToggle.innerHTML = isLight
+      ? '<i class="fa-solid fa-moon" aria-hidden="true"></i><span class="theme-toggle-label">Dark</span>'
+      : '<i class="fa-solid fa-sun" aria-hidden="true"></i><span class="theme-toggle-label">Light</span>';
+    themeToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+  }
+
   function initTheme() {
     const saved = localStorage.getItem("shecan.theme");
     const prefersLight =
       window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
     const theme = saved || (prefersLight ? "light" : "dark");
     document.body.dataset.theme = theme;
-    themeToggle.innerHTML =
-      theme === "light"
-        ? '<i class="fa-solid fa-moon"></i>'
-        : '<i class="fa-solid fa-sun"></i>';
+    updateThemeButton(theme);
   }
 
   function toggleTheme() {
     const next = document.body.dataset.theme === "light" ? "dark" : "light";
     document.body.dataset.theme = next;
     localStorage.setItem("shecan.theme", next);
-    themeToggle.innerHTML =
-      next === "light"
-        ? '<i class="fa-solid fa-moon"></i>'
-        : '<i class="fa-solid fa-sun"></i>';
+    updateThemeButton(next);
   }
 
   function boot() {

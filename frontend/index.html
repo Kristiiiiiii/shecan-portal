@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-theme="light">
     <a class="skip-link" href="#volunteer">Skip to form</a>
 
     <header class="site-header" id="top">
@@ -47,8 +47,9 @@
           <a href="#volunteer">Volunteer</a>
           <a href="#footer">Contact</a>
           <a class="pill" href="#volunteer">Join Us</a>
-          <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">
-            <i class="fa-solid fa-moon"></i>
+          <button class="icon-btn theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">
+            <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            <span class="theme-toggle-label">Dark</span>
           </button>
         </div>
       </nav>
